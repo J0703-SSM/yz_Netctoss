@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.mapper.CostMapper">
+
+    <select id="findByName" parameterType="java.lang.String" resultType="com.lanou.domain.Cost">
+        SELECT * FROM COST WHERE NAME=#{value}
+    </select>
+    
+    <select id="findCount" resultType="int">
+        SELECT COUNT(COST_ID) FROM COST
+    </select>
+
+    <select id="findAll" parameterType="Map" resultType="com.lanou.domain.Cost">
+        SELECT * FROM COST
+        <if test="orderByClause != null">
+            ORDER BY ${orderByClause}
+        </if>
+        <if test="start != null and pagesize != null">
+            limit #{start},#{pagesize}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.lanou.domain.Cost">
+        INSERT INTO COST(NAME,BASE_DURATION,BASE_COST,UNIT_COST,STATUS,DESCR,CREATIME,STARTIME,COST_TYPE)
+        VALUES(#{NAME},#{BASE_DURATION},#{BASE_COST},#{UNIT_COST},'0',#{DESCR},sysdate(),#{STARTIME},
+        #{COST_TYPE})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.lanou.domain.Cost">
+        SELECT * FROM COST WHERE COST_ID=#{COST_ID}
+    </select>
+
+    <update id="update" parameterType="com.lanou.domain.Cost">
+        UPDATE COST SET NAME=#{NAME},BASE_DURATION=#{BASE_DURATION},BASE_COST=#{BASE_COST},UNIT_COST=#{UNIT_COST},
+        STATUS=#{STATUS},DESCR=#{DESCR},CREATIME=#{CREATIME},STARTIME=#{STARTIME},COST_TYPE=#{COST_TYPE}
+        WHERE COST_ID =#{COST_ID}
+    </update>
+
+    <update id="updateById" parameterType="map">
+        UPDATE COST SET STATUS=#{STATUS} WHERE COST_ID =#{COST_ID}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM cost WHERE COST_ID=#{COST_ID}
+    </delete>
+</mapper>
