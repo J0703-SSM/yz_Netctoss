@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.role.mapper.RoleMapper">
+
+    <sql id="roleSql">
+        role_info.role_id,
+        role_info.name rname
+    </sql>
+    <sql id="moduleSql">
+        module_info.module_id,
+        module_info.name mname
+    </sql>
+
+    <resultMap id="roleMap" type="com.lanou.role.domain.Role">
+        <id column="role_id" property="role_id"/>
+        <result column="rname" property="name"/>
+    </resultMap>
+    <resultMap id="roleAndModuleMap" type="com.lanou.role.domain.Role" extends="roleMap">
+        <collection property="modules" ofType="com.lanou.role.domain.Module">
+            <id column="module_id" property="module_id"/>
+            <result column="mname" property="name"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="findCount" resultType="int">
+        SELECT COUNT(role_id) FROM role_info
+    </select>
+
+    <select id="findModulesByRole" parameterType="map" resultMap="roleAndModuleMap">
+        SELECT
+        <include refid="roleSql"/>
+        ,
+        <include refid="moduleSql"/>
+        FROM (SELECT * FROM role_info limit #{start},#{pagesize}) role_info
+        LEFT JOIN role_module ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info ON module_info.module_id = role_module.module_id
+
+    </select>
+
+    <select id="findModulesByRoleId" parameterType="int" resultMap="roleAndModuleMap">
+        SELECT
+        <include refid="roleSql"/>
+        ,
+        <include refid="moduleSql"/>
+        FROM (SELECT * FROM role_info WHERE role_id=#{value}) role_info
+        LEFT JOIN role_module ON role_info.role_id = role_module.role_id
+        LEFT JOIN module_info ON module_info.module_id = role_module.module_id
+
+    </select>
+
+    <insert id="addRole" parameterType="com.lanou.role.domain.Role" useGeneratedKeys="true" keyProperty="role_id">
+        INSERT role_info(name) VALUES (#{name})
+    </insert>
+    <insert id="addRoleAndModule" parameterType="map">
+        insert into role_module (role_id,module_id) values (#{role_id},#{module_id})
+    </insert>
+
+    <update id="updateRole" parameterType="com.lanou.role.domain.Role">
+        UPDATE role_info SET name=#{name} WHERE role_id=#{role_id}
+    </update>
+    <delete id="deleteRMByRoleId" parameterType="int">
+        DELETE FROM role_module WHERE role_id=${value}
+    </delete>
+    <delete id="deleteRoleByRoleId" parameterType="int">
+        DELETE FROM role_info WHERE role_id=#{value}
+    </delete>
+
+</mapper>

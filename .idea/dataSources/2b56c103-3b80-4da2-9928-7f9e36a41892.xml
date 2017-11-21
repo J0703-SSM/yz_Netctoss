@@ -57,7 +57,7 @@
     <column id="39" parent="27" name="account_id">
       <mandatory>1</mandatory>
       <data-type>int(9)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="40" parent="27" name="recommender_id">
       <data-type>int(9)|0</data-type>
@@ -91,10 +91,10 @@
       <data-type>char(18)|0</data-type>
     </column>
     <column id="49" parent="27" name="birthdate">
-      <data-type>datetime|0</data-type>
+      <data-type>varchar(20)|0</data-type>
     </column>
     <column id="50" parent="27" name="gender">
-      <data-type>char(1)|0</data-type>
+      <data-type>char(2)|0</data-type>
     </column>
     <column id="51" parent="27" name="occupation">
       <data-type>varchar(50)|0</data-type>
@@ -128,6 +128,7 @@
     <column id="60" parent="28" name="admin_id">
       <mandatory>1</mandatory>
       <data-type>int(8)|0</data-type>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="61" parent="28" name="admin_code">
       <mandatory>1</mandatory>
@@ -215,7 +216,7 @@
     <column id="84" parent="32" name="role_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="85" parent="32" name="name">
       <mandatory>1</mandatory>
@@ -270,9 +271,29 @@
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
     </column>
-    <key id="99" parent="34" name="PRIMARY">
+    <index id="99" parent="34" name="service_account_account_id_fk">
+      <columns>account_id</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <index id="100" parent="34" name="service_cost_cost_id_fk">
+      <columns>cost_id</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <key id="101" parent="34" name="PRIMARY">
       <columns>service_id</columns>
       <primary>1</primary>
     </key>
+    <foreign-key id="102" parent="34" name="service_account_account_id_fk">
+      <columns>account_id</columns>
+      <ref-key>~.account.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="103" parent="34" name="service_cost_cost_id_fk">
+      <columns>cost_id</columns>
+      <ref-key>~.cost.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
   </database-model>
 </dataSource>

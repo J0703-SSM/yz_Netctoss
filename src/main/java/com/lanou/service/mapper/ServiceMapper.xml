@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.service.mapper.ServiceMapper">
+    <!--<select id="findById" parameterType="java.lang.String" resultType="com.lanou.service.domain.Service">-->
+        <!--SELECT * FROM service WHERE service_id=#{value}-->
+    <!--</select>-->
+
+    <sql id="accountSql">
+        account.account_id,
+        account.real_name,
+        account.idcard_no
+    </sql>
+    <sql id="costSql">
+        cost.cost_id,
+        cost.name,
+        cost.descr
+    </sql>
+    <sql id="serviceSql">
+        service.service_id,
+        service.account_id,
+        service.unix_host,
+        service.os_username,
+        service.login_passwd,
+        service.status,
+        service.create_date,
+        service.pause_date,
+        service.close_date,
+        service.cost_id
+
+    </sql>
+
+    <resultMap id="serviceMap" type="com.lanou.service.domain.Services">
+        <id column="service_id" property="service_id"/>
+        <result column="account_id" property="account_id"/>
+        <result column="unix_host" property="unix_host"/>
+        <result column="os_username" property="os_username"/>
+        <result column="login_name" property="login_name"/>
+        <result column="login_passwd" property="login_passwd"/>
+        <result column="status" property="status"/>
+        <result column="create_date" property="create_date"/>
+        <result column="pause_date" property="pause_date"/>
+        <result column="close_date" property="close_date"/>
+        <result column="cost_id" property="cost_id"/>
+    </resultMap>
+    <resultMap id="accountAndCostMap" type="com.lanou.service.domain.Services" extends="serviceMap">
+        <association property="cost" javaType="com.lanou.fee.domain.Cost">
+            <id column="cost_id" property="COST_ID"/>
+            <result column="name" property="NAME"/>
+            <result column="descr" property="DESCR"/>
+        </association>
+        <association property="account" javaType="com.lanou.account.domain.Account">
+            <id column="account_id" property="account_id"/>
+            <result column="idcard_no" property="idcard_no"/>
+            <result column="real_name" property="real_name"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findCount" parameterType="map" resultType="int">
+        SELECT COUNT(service_id) FROM service,account,cost
+        <where>
+            1=1
+            and service.account_id = account.account_id
+            and service.cost_id = cost.cost_id
+            <if test="os_username != null">
+                and os_username LIKE '%${os_username}%'
+            </if>
+            <if test="unix_host != null">
+                and unix_host LIKE '%${unix_host}%'
+            </if>
+            <if test="idcard_no != null">
+                and account.idcard_no LIKE '%${idcard_no}%'
+            </if>
+            <if test="status != null">
+                and service.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAll" parameterType="Map" resultMap="accountAndCostMap">
+        SELECT
+        <include refid="serviceSql"/>
+        ,
+        <include refid="accountSql"/>
+        ,
+        <include refid="costSql"/>
+        FROM service,account,cost
+        <where>
+            1=1
+            and service.account_id = account.account_id
+            and service.cost_id = cost.cost_id
+            <if test="os_username != null">
+                and os_username LIKE '%${os_username}%'
+            </if>
+            <if test="unix_host != null">
+                and unix_host LIKE '%${unix_host}%'
+            </if>
+            <if test="idcard_no != null">
+                and account.idcard_no LIKE '%${idcard_no}%'
+            </if>
+            <if test="status != null">
+                and service.status = #{status}
+            </if>
+        </where>
+        <if test="start != null and pagesize != null">
+            limit #{start},#{pagesize}
+        </if>
+    </select>
+
+    <!--<insert id="save" parameterType="com.lanou.service.domain.Service">-->
+        <!--INSERT INTO account(recommender_id,login_name,login_passwd,status,create_date,real_name,idcard_no,birthdate,-->
+        <!--gender,occupation,telephone,email,mailaddress,zipcode,qq)-->
+        <!--VALUES (#{recommender_id},#{login_name},#{login_passwd},'0',sysdate(),#{real_name},#{idcard_no},-->
+        <!--#{birthdate},#{gender},#{occupation},#{telephone},#{email},#{mailaddress},#{zipcode},#{qq})-->
+    <!--</insert>-->
+
+    <!--<select id="findById" parameterType="int" resultType="com.lanou.service.domain.Service">-->
+        <!--SELECT * FROM account WHERE account_id=#{account_id}-->
+    <!--</select>-->
+
+    <!--<update id="update" parameterType="com.lanou.service.domain.Service">-->
+        <!--UPDATE account SET recommender_id=#{recommender_id},login_name=#{login_name},real_name=#{real_name},-->
+        <!--idcard_no=#{idcard_no},birthdate=#{birthdate},gender=#{gender},occupation=#{occupation},telephone=#{telephone},-->
+        <!--email=#{email},mailaddress=#{mailaddress},zipcode=#{zipcode},qq=#{qq}-->
+        <!--WHERE account_id=#{account_id}-->
+    <!--</update>-->
+
+    <!--<update id="updateById" parameterType="map">-->
+        <!--UPDATE account SET status=#{status},-->
+        <!--<if test="status == 0">-->
+            <!--create_date=sysdate()-->
+        <!--</if>-->
+        <!--<if test="status == 1">-->
+            <!--pause_date=sysdate()-->
+        <!--</if>-->
+        <!--<if test="status == 2">-->
+            <!--close_date=sysdate()-->
+        <!--</if>-->
+        <!--WHERE account_id =#{account_id}-->
+    <!--</update>-->
+
+</mapper>

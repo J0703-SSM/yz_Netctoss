@@ -3,13 +3,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global_color.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css" />
     </head>
     <body>
         <!--Logo区域开始-->
         <div id="header">
-            <img src="../images/logo.png" alt="logo" class="left"/>
+            <img src="/resource/images/logo.png" alt="logo" class="left"/>
             <a href="#">[退出]</a>            
         </div>
         <!--Logo区域结束-->
@@ -17,15 +17,15 @@
         <div id="navi">
             <ul id="menu">
                 <li><a href="/index" class="index_off"></a></li>
-                <li><a href="/role_list" class="role_off"></a></li>
-                <li><a href="/admin_list" class="admin_off"></a></li>
-                <li><a href="/fee_list" class="fee_off"></a></li>
-                <li><a href="/account_list" class="account_off"></a></li>
-                <li><a href="/service_list" class="service_off"></a></li>
-                <li><a href="/bill_list" class="bill_off"></a></li>
-                <li><a href="/report_list" class="report_off"></a></li>
-                <li><a href="/user_info" class="information_off"></a></li>
-                <li><a href="/user_modi_pwd" class="password_on"></a></li>
+                <li><a href="/role/role_list" class="role_off"></a></li>
+                <li><a href="/admin/admin_list" class="admin_off"></a></li>
+                <li><a href="/fee/fee_list" class="fee_on"></a></li>
+                <li><a href="/account/account_list" class="account_off"></a></li>
+                <li><a href="/service/service_list" class="service_off"></a></li>
+                <li><a href="/bill/bill_list" class="bill_off"></a></li>
+                <li><a href="/report/report_list" class="report_off"></a></li>
+                <li><a href="/user/user_info" class="information_off"></a></li>
+                <li><a href="/user/user_modi_pwd" class="password_off"></a></li>
             </ul>
         </div>
         <!--导航区域结束-->

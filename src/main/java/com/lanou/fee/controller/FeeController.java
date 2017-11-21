@@ -1,8 +1,8 @@
-package com.lanou.controller;
+package com.lanou.fee.controller;
 
-import com.lanou.domain.Cost;
-import com.lanou.response.AjaxLoginResult;
-import com.lanou.service.CostService;
+import com.lanou.fee.domain.Cost;
+import com.lanou.util.AjaxLoginResult;
+import com.lanou.fee.service.CostService;
 import com.lanou.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,7 +1,7 @@
-package com.lanou.mapper;
+package com.lanou.fee.mapper;
 
 
-import com.lanou.domain.Cost;
+import com.lanou.fee.domain.Cost;
 
 import java.util.List;
 import java.util.Map;

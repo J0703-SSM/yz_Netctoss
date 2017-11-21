@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.account.mapper.AccountMapper">
+    <select id="findByIdCard" parameterType="java.lang.String" resultType="com.lanou.account.domain.Account">
+        SELECT * FROM account WHERE idcard_no=#{value}
+    </select>
+
+    <select id="findCount" parameterType="map" resultType="int">
+        SELECT COUNT(account_id) FROM account
+        <where>
+            1=1
+            <if test="idcard_no != null">
+                and idcard_no LIKE '%${idcard_no}%'
+            </if>
+            <if test="real_name != null">
+                and real_name LIKE '%${real_name}%'
+            </if>
+            <if test="login_name != null">
+                and login_name LIKE '%${login_name}%'
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAll" parameterType="Map" resultType="com.lanou.account.domain.Account">
+        SELECT * FROM account
+        <where>
+            1=1
+            <if test="idcard_no != null">
+                and idcard_no LIKE '%${idcard_no}%'
+            </if>
+            <if test="real_name != null">
+                and real_name LIKE '%${real_name}%'
+            </if>
+            <if test="login_name != null">
+                and login_name LIKE '%${login_name}%'
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        <if test="start != null and pagesize != null">
+            limit #{start},#{pagesize}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.lanou.account.domain.Account">
+        INSERT INTO account(recommender_id,login_name,login_passwd,status,create_date,real_name,idcard_no,birthdate,
+        gender,occupation,telephone,email,mailaddress,zipcode,qq)
+        VALUES (#{recommender_id},#{login_name},#{login_passwd},'0',sysdate(),#{real_name},#{idcard_no},
+        #{birthdate},#{gender},#{occupation},#{telephone},#{email},#{mailaddress},#{zipcode},#{qq})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.lanou.account.domain.Account">
+        SELECT * FROM account WHERE account_id=#{account_id}
+    </select>
+
+    <update id="update" parameterType="com.lanou.account.domain.Account">
+    UPDATE account SET recommender_id=#{recommender_id},login_name=#{login_name},real_name=#{real_name},
+    idcard_no=#{idcard_no},birthdate=#{birthdate},gender=#{gender},occupation=#{occupation},telephone=#{telephone},
+    email=#{email},mailaddress=#{mailaddress},zipcode=#{zipcode},qq=#{qq}
+    WHERE account_id=#{account_id}
+    </update>
+
+    <update id="updateById" parameterType="map">
+        UPDATE account SET status=#{status},
+        <if test="status == 0">
+            create_date=sysdate()
+        </if>
+        <if test="status == 1">
+            pause_date=sysdate()
+        </if>
+        <if test="status == 2">
+            close_date=sysdate()
+        </if>
+        WHERE account_id =#{account_id}
+    </update>
+
+</mapper>

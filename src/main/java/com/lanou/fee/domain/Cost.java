@@ -1,5 +1,6 @@
-package com.lanou.domain;
+package com.lanou.fee.domain;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -14,15 +15,15 @@ public class Cost {
     private int UNIT_COST;
     private String STATUS;
     private String DESCR;
-    private Date CREATIME;
-    private Date STARTIME;
+    private Timestamp CREATIME;
+    private Timestamp STARTIME;
     private String COST_TYPE;
 
     public Cost() {
     }
 
     public Cost(int COST_ID, String NAME, int BASE_DURATION, int BASE_COST,
-                int UNIT_COST, String STATUS, String DESCR, Date CREATIME, Date STARTIME,
+                int UNIT_COST, String STATUS, String DESCR, Timestamp CREATIME, Timestamp STARTIME,
                 String COST_TYPE) {
         this.COST_ID = COST_ID;
         this.NAME = NAME;
@@ -108,19 +109,19 @@ public class Cost {
         this.DESCR = DESCR;
     }
 
-    public Date getCREATIME() {
+    public Timestamp getCREATIME() {
         return CREATIME;
     }
 
-    public void setCREATIME(Date CREATIME) {
+    public void setCREATIME(Timestamp CREATIME) {
         this.CREATIME = CREATIME;
     }
 
-    public Date getSTARTIME() {
+    public Timestamp getSTARTIME() {
         return STARTIME;
     }
 
-    public void setSTARTIME(Date STTARTIME) {
+    public void setSTARTIME(Timestamp STTARTIME) {
         this.STARTIME = STARTIME;
     }
 

@@ -1,11 +1,18 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global_color.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css" />
         <script language="javascript" type="text/javascript">
+
+            function search() {
+                document.getElementById("form").submit()
+            }
+
             //显示角色详细信息
             function showDetail(flag, a) {
                 var detailDiv = a.parentNode.getElementsByTagName("div")[0];
@@ -30,7 +37,7 @@
     <body>
         <!--Logo区域开始-->
         <div id="header">
-            <img src="../images/logo.png" alt="logo" class="left"/>
+            <img src="/resource/images/logo.png" alt="logo" class="left"/>
             <a href="#">[退出]</a>            
         </div>
         <!--Logo区域结束-->
@@ -38,40 +45,40 @@
         <div id="navi">                        
             <ul id="menu">
                 <li><a href="/index" class="index_off"></a></li>
-                <li><a href="/role_list" class="role_off"></a></li>
-                <li><a href="/admin_list" class="admin_off"></a></li>
-                <li><a href="/fee_list" class="fee_off"></a></li>
-                <li><a href="/account_list" class="account_off"></a></li>
-                <li><a href="/service_list" class="service_off"></a></li>
-                <li><a href="/bill_list" class="bill_off"></a></li>
-                <li><a href="/report_list" class="report_off"></a></li>
-                <li><a href="/user_info" class="information_off"></a></li>
-                <li><a href="/user_modi_pwd" class="password_on"></a></li>
+                <li><a href="/role/role_list" class="role_off"></a></li>
+                <li><a href="/admin/admin_list" class="admin_off"></a></li>
+                <li><a href="/fee/fee_list" class="fee_off"></a></li>
+                <li><a href="/account/account_list" class="account_off"></a></li>
+                <li><a href="/service/service_list" class="service_on"></a></li>
+                <li><a href="/bill/bill_list" class="bill_off"></a></li>
+                <li><a href="/report/report_list" class="report_off"></a></li>
+                <li><a href="/user/user_info" class="information_off"></a></li>
+                <li><a href="/user/user_modi_pwd" class="password_off"></a></li>
             </ul>            
         </div>
         <!--导航区域结束-->
         <!--主要区域开始-->
         <div id="main">
-            <form action="" method="">
+            <form id="form" action="/service/service_list" method="post">
                 <!--查询-->
                 <div class="search_add">                        
-                    <div>OS 账号：<input type="text" value="" class="width100 text_search" /></div>                            
-                    <div>服务器 IP：<input type="text" value="" class="width100 text_search" /></div>
-                    <div>身份证：<input type="text"  value="" class="text_search" /></div>
+                    <div>OS 账号：<input name="os_username" type="text" value="${sessionScope.services.os_username}" class="width100 text_search" /></div>
+                    <div>服务器 IP：<input name="unix_host" type="text" value="${sessionScope.services.unix_host}" class="width100 text_search" /></div>
+                    <div>身份证：<input name="idcard_no" type="text"  value="${sessionScope.services.account.idcard_no}" class="text_search" /></div>
                     <div>状态：
-                        <select class="select_search">
-                            <option>全部</option>
-                            <option>开通</option>
-                            <option>暂停</option>
-                            <option>删除</option>
+                        <select name="status" class="select_search">
+                            <option <c:if test="${sessionScope.services.status == null}">selected="selected"</c:if> value="">全部</option>
+                            <option <c:if test="${sessionScope.services.status == '0'}">selected="selected"</c:if> value="0">开通</option>
+                            <option <c:if test="${sessionScope.services.status == '1'}">selected="selected"</c:if> value="1">暂停</option>
+                            <option <c:if test="${sessionScope.services.status == '2'}">selected="selected"</c:if> value="2">删除</option>
                         </select>
                     </div>
-                    <div><input type="button" value="搜索" class="btn_search" /></div>
+                    <div><input type="button" value="搜索" class="btn_search" onclick="search()" /></div>
                     <input type="button" value="增加" class="btn_add" onclick="location.href='service_add.jsp';" />
                 </div>  
                 <!--删除的操作提示-->
                 <div id="operate_result_info" class="operate_success">
-                    <img src="../images/close.png" onclick="this.parentNode.style.display='none';" />
+                    <img src="/resource/images/close.png" onclick="this.parentNode.style.display='none';" />
                     删除成功！
                 </div>   
                 <!--数据区域：用表格展示数据-->     
@@ -88,108 +95,48 @@
                         <th class="width100">资费</th>                                                        
                         <th class="width200"></th>
                     </tr>
-                    <tr>
-                        <td><a href="service_detail.jsp" title="查看明细">1</a></td>
-                        <td>101</td>
-                        <td>230102197902137862</td>
-                        <td>张三</td>
-                        <td>openlab1</td>
-                        <td>开通</td>
-                        <td>192.168.0.23</td>
-                        <td>
-                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 20 小时</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                20小时，24.5 元，超出部分 0.03元/分钟
-                            </div>
-                        </td>                            
-                        <td class="td_modi">
-                            <input type="button" value="暂停" class="btn_pause" onclick="setState();" />
-                            <input type="button" value="修改" class="btn_modify" onclick="location.href='service_modi.jsp';" />
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="service_detail.jsp" title="查看明细">2</a></td>
-                        <td>101</td>
-                        <td>230102197902137862</td>
-                        <td>张三</td>
-                        <td>openlab2</td>
-                        <td>暂停</td>
-                        <td>192.168.100.20</td>
-                        <td>
-                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 40 小时</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                40小时，40.5 元，超出部分 0.03元/分钟
-                            </div>
-                        </td>                            
-                        <td class="td_modi">
-                            <input type="button" value="开通" class="btn_start" onclick="setState();" />
-                            <input type="button" value="修改" class="btn_modify" onclick="location.href='service_modi.jsp';" />
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="service_detail.jsp" title="查看明细">3</a></td>
-                        <td>101</td>
-                        <td>230102197902137862</td>
-                        <td>张三</td>
-                        <td>openlab3</td>
-                        <td>删除</td>
-                        <td>192.168.10.23</td>
-                        <td>
-                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 60 小时</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                60小时，55 元，超出部分 0.03元/分钟
-                            </div>
-                        </td>                            
-                        <td class="td_modi">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="service_detail.jsp" title="查看明细">4</a></td>
-                        <td>102</td>
-                        <td>230102197902111111</td>
-                        <td>李四</td>
-                        <td>openlab1</td>
-                        <td>开通</td>
-                        <td>192.168.0.23</td>
-                        <td>
-                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 20 小时</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                20小时，24.5 元，超出部分 0.03元/分钟
-                            </div>
-                        </td>                            
-                        <td class="td_modi">
-                            <input type="button" value="暂停" class="btn_pause" onclick="setState();" />
-                            <input type="button" value="修改" class="btn_modify" onclick="location.href='service_modi.jsp';" />
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="service_detail.jsp" title="查看明细">5</a></td>
-                        <td>102</td>
-                        <td>230102197902137862</td>
-                        <td>张三</td>
-                        <td>openlab1</td>
-                        <td>开通</td>
-                        <td>192.168.0.23</td>
-                        <td>
-                            <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包 20 小时</a>
-                            <!--浮动的详细信息-->
-                            <div class="detail_info">
-                                20小时，24.5 元，超出部分 0.03元/分钟
-                            </div>
-                        </td>                            
-                        <td class="td_modi">
-                            <input type="button" value="暂停" class="btn_pause" onclick="setState();" />
-                            <input type="button" value="修改" class="btn_modify" onclick="location.href='service_modi.jsp';" />
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();" />
-                        </td>
-                    </tr>                                                                
+                        <c:forEach items="${pb.beanList}" var="service">
+                            <tr>
+                                <td><a href="service_detail.jsp" title="查看明细">${service.service_id}</a></td>
+                                <td>${service.account_id}</td>
+                                <td>${service.account.idcard_no}</td>
+                                <td>${service.account.real_name}</td>
+                                <td>${service.os_username}</td>
+                                <td><c:if test="${service.status == '0'}">
+                                    ${'开通'}
+                                </c:if>
+                                    <c:if test="${service.status == '1'}">
+                                        ${'暂停'}
+                                    </c:if>
+                                    <c:if test="${service.status == '2'}">
+                                        ${'删除'}
+                                    </c:if></td>
+                                <td>${service.unix_host}</td>
+                                <td>
+                                    <a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">${service.cost.NAME}</a>
+                                    <!--浮动的详细信息-->
+                                    <div class="detail_info">
+                                        ${service.cost.DESCR}
+                                    </div>
+                                </td>
+                                <td class="td_modi">
+                                    <c:if test="${service.status == '0'}">
+                                        <input type="button" value="暂停" class="btn_pause" onclick="setState(${service.service_id},${service.status});"/>
+                                        <input type="button" value="修改" class="btn_modify"
+                                               onclick="location.href='/account/accountModi?account_id=${service.service_id}';"/>
+                                        <input type="button" value="删除" class="btn_delete" onclick="deleteAccount(${service.service_id});"/>
+                                    </c:if>
+                                    <c:if test="${service.status == '1'}">
+                                        <input type="button" value="开通" class="btn_start" onclick="setState(${service.service_id},${service.status});"/>
+                                        <input type="button" value="修改" class="btn_modify" onclick="location.href='/account/accountModi?account_id=${service.service_id}';"/>
+                                        <input type="button" value="删除" class="btn_delete" onclick="deleteAccount(${service.service_id});"/>
+                                    </c:if>
+                                    <c:if test="${service.status == '3'}">
+                                        ${''}
+                                    </c:if>
+                                </td>
+                            </tr>
+                        </c:forEach>
                 </table>                
                 <p>业务说明：<br />
                 1、创建即开通，记载创建时间；<br />
@@ -201,15 +148,46 @@
                 </div>                    
                 <!--分页-->
                 <div id="pages">
-                    <a href="#">首页</a>
-        	        <a href="#">上一页</a>
-                    <a href="#" class="current_page">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">下一页</a>
-                    <a href="#">末页</a>
+                    <a href="/service/service_list">首页</a>
+                    <c:if test="${pb.pc > 1}">
+                        <a href="/service/service_list?pc=${pb.pc-1}">上一页</a>
+                    </c:if>
+
+                    <c:choose>
+                        <c:when test="${pb.tp <= 10}">
+                            <c:set var="begin" value="1"/>
+                            <c:set var="end" value="${pb.tp}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="begin" value="${pb.pc-5}"/>
+                            <c:set var="end" value="${pb.pc+4}"/>
+                            <%-- 头溢出 --%>
+                            <c:if test="${begin < 1}">
+                                <c:set var="begin" value="1"/>
+                                <c:set var="end" value="10"/>
+                            </c:if>
+                            <%-- 尾溢出 --%>
+                            <c:if test="${end > pb.tp}">
+                                <c:set var="begin" value="${pb.tp - 9}"/>
+                                <c:set var="end" value="${pb.tp}"/>
+                            </c:if>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:forEach var="i" begin="${begin}" end="${end}">
+                        <c:choose>
+                            <c:when test="${pb.pc eq i}">
+                                <a href="/service/service_list?pc=${i}"
+                                   class="current_page">${i}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="/service/service_list?pc=${i}">${i}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    <c:if test="${pb.pc < pb.tp}">
+                        <a href="/service/service_list?pc=${pb.pc+1}">下一页</a>
+                    </c:if>
+                    <a href="/service/service_list?pc=${pb.tp}">尾页</a>
                 </div>                    
             </form>
         </div>

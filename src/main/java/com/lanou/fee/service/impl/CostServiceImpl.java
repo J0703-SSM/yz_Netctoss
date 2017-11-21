@@ -1,8 +1,8 @@
-package com.lanou.service.impl;
+package com.lanou.fee.service.impl;
 
-import com.lanou.domain.Cost;
-import com.lanou.mapper.CostMapper;
-import com.lanou.service.CostService;
+import com.lanou.fee.domain.Cost;
+import com.lanou.fee.mapper.CostMapper;
+import com.lanou.fee.service.CostService;
 import com.lanou.util.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

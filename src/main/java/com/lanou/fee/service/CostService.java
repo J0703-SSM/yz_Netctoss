@@ -1,9 +1,7 @@
-package com.lanou.service;
+package com.lanou.fee.service;
 
-import com.lanou.domain.Cost;
+import com.lanou.fee.domain.Cost;
 import com.lanou.util.PageBean;
-
-import java.util.List;
 
 /**
  * Created by dllo on 17/11/13.

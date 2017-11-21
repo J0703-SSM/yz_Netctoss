@@ -15,20 +15,20 @@
 
             if (btnObj.className == "sort_desc") {
                 if (str == '基费') {
-                    window.location.href = "/fee/fee_list/?str=base_cost asc&sort=sort_asc";
+                    window.location.href = "/fee/fee_list/?str=base_cost asc&sort=cost_asc";
                 }
                 if (str == '时长') {
-                    window.location.href = "/fee/fee_list/?str=base_duration asc&sort=sort_asc";
+                    window.location.href = "/fee/fee_list/?str=base_duration asc&sort=duration_asc";
                 }
 
                 btnObj.className = "sort_asc";
             } else {
                 btnObj.className = "sort_desc";
                 if (str == '基费') {
-                    window.location.href = "/fee/fee_list/?str=base_cost desc&sort=sort_desc";
+                    window.location.href = "/fee/fee_list/?str=base_cost desc&sort=cost_desc";
                 }
                 if (str == '时长') {
-                    window.location.href = "/fee/fee_list/?str=base_duration desc&sort=sort_desc";
+                    window.location.href = "/fee/fee_list/?str=base_duration desc&sort=duration_desc";
                 }
             }
 
@@ -41,7 +41,7 @@
             $.post("/fee/fee_start", {"id": id}, function (result) {
                 if (result.errorCode == 0) {
                     document.getElementById("operate_result_info").style.display = "block";
-                    location.href="/fee/fee_list";
+                    location.href="/fee/fee_list?pc=${pb.pc}&str=${sessionScope.str}&sort=${sort}";
                 }
             })
 
@@ -64,7 +64,7 @@
 <body>
 <!--Logo区域开始-->
 <div id="header">
-    <img src="../images/logo.png" alt="logo" class="left"/>
+    <img src="/resource/images/logo.png" alt="logo" class="left"/>
     <a href="#">[退出]</a>
 </div>
 <!--Logo区域结束-->
@@ -72,15 +72,15 @@
 <div id="navi">
     <ul id="menu">
         <li><a href="/index" class="index_off"></a></li>
-        <li><a href="/role_list" class="role_off"></a></li>
-        <li><a href="/admin_list" class="admin_off"></a></li>
+        <li><a href="/role/role_list" class="role_off"></a></li>
+        <li><a href="/admin/admin_list" class="admin_off"></a></li>
         <li><a href="/fee/fee_list" class="fee_on"></a></li>
-        <li><a href="/account_list" class="account_off"></a></li>
-        <li><a href="/service_list" class="service_off"></a></li>
-        <li><a href="/bill_list" class="bill_off"></a></li>
-        <li><a href="/report_list" class="report_off"></a></li>
-        <li><a href="/user_info" class="information_off"></a></li>
-        <li><a href="/user_modi_pwd" class="password_oof"></a></li>
+        <li><a href="/account/account_list" class="account_off"></a></li>
+        <li><a href="/service/service_list" class="service_off"></a></li>
+        <li><a href="/bill/bill_list" class="bill_off"></a></li>
+        <li><a href="/report/report_list" class="report_off"></a></li>
+        <li><a href="/user/user_info" class="information_off"></a></li>
+        <li><a href="/user/user_modi_pwd" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->
@@ -92,19 +92,19 @@
             <div>
                 <!--<input type="button" value="月租" class="sort_asc" onclick="sort(this);" />-->
                 <input type="button" value="基费"
-                        <c:if test="${sort == null}">
+                        <c:if test="${sort != 'cost_desc'}">
                             class="sort_asc"
                         </c:if>
-                        <c:if test="${sort != null}">
-                            class="${sort}"
+                        <c:if test="${sort !='cost_asc'}">
+                            class="sort_desc"
                         </c:if>
                        onclick="sort(this);"/>
                 <input type="button" value="时长"
-                        <c:if test="${sort == null}">
+                        <c:if test="${sort != 'duration_desc'}">
                             class="sort_asc"
                         </c:if>
-                        <c:if test="${sort != null}">
-                            class="${sort}"
+                        <c:if test="${sort != 'duration_asc'}">
+                            class="sort_desc"
                         </c:if>
                        onclick="sort(this);"/>
             </div>
