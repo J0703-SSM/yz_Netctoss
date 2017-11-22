@@ -1,13 +1,40 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/styles/global_color.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resource/styles/global_color.css" />
+        <script src="/resource/js/JQ3.2.1.js"></script>
         <script language="javascript" type="text/javascript">
             //保存成功的提示消息
             function showResult() {
+
+                var roles = [];
+                $(":input:checkbox:checked").each(function () {
+                    roles.push($(this).val())
+                })
+                $.ajax({
+                    type:"post",
+                    url:"/admin/admin_modi",
+                    data:{
+                        "admin_id": ${admin.admin_id},
+                        "name": $("#name").val(),
+                        "admin_code": $("#admin_code").val(),
+                        "telephone": $("#telephone").val(),
+                        "email": $("#email").val(),
+                        "role_id": roles
+                    },success:function (result) {
+                        if (result.errorCode == 0){
+                            showResultDiv(true);
+                            window.setTimeout("showResultDiv(false);", 3000);
+                            location.href="/admin/admin_list"
+                        }
+                    }
+                })
+
                 showResultDiv(true);
                 window.setTimeout("showResultDiv(false);", 3000);
             }
@@ -23,7 +50,7 @@
     <body>
         <!--Logo区域开始-->
         <div id="header">
-            <img src="../images/logo.png" alt="logo" class="left"/>
+            <img src="/resource/images/logo.png" alt="logo" class="left"/>
             <a href="#">[退出]</a>            
         </div>
         <!--Logo区域结束-->
@@ -49,21 +76,21 @@
             <form action="" method="" class="main_form">
                     <div class="text_info clearfix"><span>姓名：</span></div>
                     <div class="input_info">
-                        <input type="text" value="张三" />
+                        <input id="name" type="text" value="${admin.name}" />
                         <span class="required">*</span>
                         <div class="validate_msg_long error_msg">20长度以内的汉字、字母、数字的组合</div>
                     </div>
                     <div class="text_info clearfix"><span>管理员账号：</span></div>
-                    <div class="input_info"><input type="text" readonly="readonly" class="readonly" value="admin1"  /></div>
+                    <div class="input_info"><input id="admin_code" type="text" readonly="readonly" class="readonly" value="${admin.admin_code}"  /></div>
                     <div class="text_info clearfix"><span>电话：</span></div>
                     <div class="input_info">
-                        <input type="text" value="13111111111"  />
+                        <input id="telephone" type="text" value="${admin.telephone}"  />
                         <span class="required">*</span>
                         <div class="validate_msg_long error_msg">正确的电话号码格式：手机或固话</div>
                     </div>
                     <div class="text_info clearfix"><span>Email：</span></div>
                     <div class="input_info">
-                        <input type="text" class="width200" value="aa@aa.com"/>
+                        <input id="email" type="text" class="width200" value="${admin.email}"/>
                         <span class="required">*</span>
                         <div class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
                     </div>
@@ -71,13 +98,16 @@
                     <div class="input_info_high">
                         <div class="input_info_scroll">
                             <ul>
-                                <li><input type="checkbox" />超级管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
+                                <c:forEach items="${requestScope.roles}" var="role">
+                                    <li><input value="${role.role_id}" type="checkbox"
+                                    <c:forEach items="${admin.roles}" var="rol">
+                                        <c:if test="${rol.role_id == role.role_id}">
+                                            checked="checked"
+                                        </c:if>
+                                    </c:forEach>
+                                    />${role.name}</li>
+                                </c:forEach>
+
                             </ul>
                         </div>
                         <span class="required">*</span>

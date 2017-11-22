@@ -49,9 +49,18 @@
 
         }
         //删除
-        function deleteAdmin() {
+        function deleteAdmin(id) {
             var r = window.confirm("确定要删除此管理员吗？");
-            document.getElementById("operate_result_info").style.display = "block";
+            $.post("/admin/admin_delete", {"id": id}, function (result) {
+                if (result.errorCode == 0) {
+                    // 删除某一行
+                    alert(result.message)
+                    var rowid = "#" + id;
+                    $(rowid).remove();
+                }else {
+                    document.getElementById("operate_result_info").style.display = "block";
+                }
+            })
         }
         //全选
         function selectAdmins(inputObj) {
@@ -133,7 +142,7 @@
                     <th></th>
                 </tr>
                 <c:forEach items="${pb.beanList}" var="admin">
-                    <tr>
+                    <tr id="${admin.admin_id}">
                         <td><input type="checkbox" value="${admin.admin_id}"/></td>
                         <td>${admin.admin_id}</td>
                         <td>${admin.name}</td>
@@ -168,8 +177,8 @@
 
                         <td class="td_modi">
                             <input type="button" value="修改" class="btn_modify"
-                                   onclick="location.href='/admin/admin_modi';"/>
-                            <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();"/>
+                                   onclick="location.href='/admin/adminModi?admin_id=${admin.admin_id}';"/>
+                            <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin(${admin.admin_id});"/>
                         </td>
                     </tr>
                 </c:forEach>

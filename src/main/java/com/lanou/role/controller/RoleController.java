@@ -97,7 +97,6 @@ public class RoleController {
         roleService.deleteRMByRoleId(id);
         roleService.deleteRoleByRoleId(id);
         result.setErrorCode(0);
-
         return result;
     }
 

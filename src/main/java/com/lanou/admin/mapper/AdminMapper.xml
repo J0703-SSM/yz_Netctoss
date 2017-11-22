@@ -109,4 +109,31 @@
     <select id="findRole" resultType="com.lanou.role.domain.Role">
         SELECT * FROM role_info
     </select>
+
+    <select id="findRolesByAdminId" parameterType="int" resultMap="adminAndRole">
+        SELECT
+        <include refid="adminSql"/>
+        ,
+        <include refid="roleSql"/>
+        FROM (SELECT * FROM admin_info WHERE admin_id=#{value}) admin_info
+        LEFT JOIN admin_role ON admin_info.admin_id = admin_role.admin_id
+        LEFT JOIN role_info ON role_info.role_id = admin_role.role_id
+
+    </select>
+
+    <update id="updateAdmin" parameterType="com.lanou.admin.domain.Admin">
+        UPDATE admin_info SET name=#{name},admin_code=#{admin_code},telephone=#{telephone},email=#{email}
+        WHERE admin_id=#{admin_id}
+    </update>
+
+    <delete id="deleteARByAdminId" parameterType="int">
+        DELETE FROM admin_role WHERE admin_id=${value}
+    </delete>
+    <delete id="deleteAdminByAdminId" parameterType="int">
+        DELETE FROM admin_info WHERE admin_id=#{value}
+    </delete>
+    
+    <select id="findAdminByCode" parameterType="java.lang.String" resultType="com.lanou.admin.domain.Admin">
+        SELECT * FROM admin_info WHERE admin_code=#{value}
+    </select>
 </mapper>

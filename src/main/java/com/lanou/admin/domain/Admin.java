@@ -2,6 +2,7 @@ package com.lanou.admin.domain;
 
 
 import com.lanou.role.domain.Role;
+import org.hibernate.validator.constraints.Length;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,10 +14,13 @@ import java.util.List;
 public class Admin {
 
     private Integer admin_id;
+    @Length(max = 30,message = "30长度以内的字母、数字和下划线的组合")
     private String admin_code;
     private String password;
+    @Length(max = 20,message = "20长度以内的汉字、字母、数字的组合")
     private String name;
     private String telephone;
+    @Length(max = 50,message = "50长度以内")
     private String email;
     private Timestamp enrolldate;
 

@@ -20,4 +20,13 @@ public interface AdminMapper {
 
     int addAdmin(Admin admin);
     int addAdminAndRole(Map<String,Object> map);
+
+    int deleteARByAdminId(int admin_id);
+    int deleteAdminByAdminId(int admin_id);
+
+    Admin findRolesByAdminId(int admin_id);
+
+    int updateAdmin(Admin admin);
+    
+    Admin findAdminByCode(String admin_code);
 }

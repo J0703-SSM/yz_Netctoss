@@ -88,4 +88,31 @@ public class AdminServiceImpl implements AdminService {
     public List<Role> findRole() {
         return adminMapper.findRole();
     }
+
+    public int deleteARByAdminId(int admin_id) {
+        return adminMapper.deleteARByAdminId(admin_id);
+    }
+
+    public int deleteAdminByAdminId(int admin_id) {
+        return adminMapper.deleteAdminByAdminId(admin_id);
+    }
+
+    public Admin findRolesByAdminId(int admin_id) {
+        return adminMapper.findRolesByAdminId(admin_id);
+    }
+
+    public int updateAdmin(Admin admin) {
+        return adminMapper.updateAdmin(admin);
+    }
+
+    public int addAdminAndRole(int admin_id, int role_id) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("admin_id",admin_id);
+        map.put("role_id",role_id);
+        return  adminMapper.addAdminAndRole(map);
+    }
+
+    public Admin findAdminByCode(String admin_code) {
+        return adminMapper.findAdminByCode(admin_code);
+    }
 }

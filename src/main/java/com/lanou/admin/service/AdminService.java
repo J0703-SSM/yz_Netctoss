@@ -19,4 +19,15 @@ public interface AdminService {
     int addAdmin(Admin admin);
 
     List<Role> findRole();
+
+    int deleteARByAdminId(int admin_id);
+    int deleteAdminByAdminId(int admin_id);
+
+    Admin findRolesByAdminId(int admin_id);
+
+    int updateAdmin(Admin admin);
+
+    int addAdminAndRole(int admin_id,int role_id);
+
+    Admin findAdminByCode(String admin_code);
 }

@@ -18,8 +18,8 @@
                 <li><a href="/service/service_list" class="service_off"></a></li>
                 <li><a href="/bill_list" class="bill_off"></a></li>
                 <li><a href="/report_list" class="report_off"></a></li>
-                <li><a href="/user_info" class="information_off"></a></li>
-                <li><a href="/user_modi_pwd" class="password_off"></a></li>
+                <li><a href="/admin/user_info" class="information_off"></a></li>
+                <li><a href="/admin/modi_pwd" class="password_off"></a></li>
             </ul>
         </div>
     </body>

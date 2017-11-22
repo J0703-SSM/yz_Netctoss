@@ -14,31 +14,47 @@
         function showResult() {
 
             var ids = [];
-            $(":input:checkbox:checked").each(function () {
-                ids.push($(this).val());
-            })
-            $.ajax({
-                type: "post",
-                url: "/admin/admin_add",
-                data: {
-                    "ids": ids,
-                    "name": $("#name").val(),
-                    "admin_code": $("#admin_code").val(),
-                    "password": $("#password").val(),
-                    "rePassword": $("#rePassword").val(),
-                    "telephone": $("#telephone").val(),
-                    "email": $("#email").val()
 
-                }, success: function (result) {
-                    if (result.errorCode == 0) {
-                        showResultDiv(true);
-                        window.setTimeout("showResultDiv(false);", 3000);
-                    } else if (result.errorCode == 10) {
-                        document.getElementById("passError").style.display = "block"
+
+                $(":input:checkbox:checked").each(function () {
+                    ids.push($(this).val());
+                })
+
+            if (ids.length > 0){
+                document.getElementById("roleError").style.display = "none"
+                document.getElementById("rePassError").style.display = "none"
+                document.getElementById("telephoneError").style.display = "none"
+                document.getElementById("emailError").style.display = "none"
+                $.ajax({
+                    type: "post",
+                    url: "/admin/admin_add",
+                    data: {
+                        "ids": ids,
+                        "name": $("#name").val(),
+                        "admin_code": $("#admin_code").val(),
+                        "password": $("#password").val(),
+                        "rePassword": $("#rePassword").val(),
+                        "telephone": $("#telephone").val(),
+                        "email": $("#email").val()
+
+                    }, success: function (result) {
+                        if (result.errorCode == 0) {
+                            showResultDiv(true);
+                            window.setTimeout("showResultDiv(false);", 3000);
+                        } else if (result.errorCode == 10) {
+                            document.getElementById("rePassError").style.display = "block"
+                        }else if(result.errorCode == 20){
+                            document.getElementById("telephoneError").style.display = "block"
+                        }else if(result.errorCode == 30){
+                            document.getElementById("emailError").style.display = "block"
+                        }else if(result.errorCode == 5){
+                            document.getElementById("passError").style.display = "block"
+                        }
                     }
-                }
-            })
-
+                })
+            }else {
+                document.getElementById("roleError").style.display="block";
+            }
         }
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
@@ -92,42 +108,39 @@
         <div class="input_info">
             <input id="password" type="password"/>
             <span class="required">*</span>
-            <div class="validate_msg_long error_msg">30长度以内的字母、数字和下划线的组合</div>
+            <div id="passError" class="validate_msg_long error_msg" style="display: none">30长度以内的字母、数字和下划线的组合</div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
             <input id="rePassword" type="password"/>
             <span class="required">*</span>
 
-            <div class="validate_msg_long error_msg" style="display: none">两次密码必须相同</div>
+            <div id="rePassError" class="validate_msg_long error_msg" style="display: none">两次密码必须相同</div>
 
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
             <input id="telephone" type="text" class="width200"/>
             <span class="required">*</span>
-            <div class="validate_msg_medium error_msg">正确的电话号码格式：手机或固话</div>
+            <div id="telephoneError" class="validate_msg_medium error_msg" style="display: none">请填写正确的电话号码格式：手机或固话</div>
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
             <input id="email" type="text" class="width200"/>
             <span class="required">*</span>
-            <div class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
+            <div id="emailError" class="validate_msg_medium error_msg" style="display: none">50长度以内，正确的 email 格式</div>
         </div>
         <div class="text_info clearfix"><span>角色：</span></div>
         <div class="input_info_high">
             <div class="input_info_scroll">
                 <ul>
-                    <%--<li><input value="608" type="checkbox"  />超级管理员</li>--%>
-                    <%--<li><input value="609" type="checkbox" />账务账号管理员</li>--%>
-                    <%--<li><input value="610" type="checkbox" />业务账号管理员</li>--%>
                     <c:forEach items="${roles}" var="role">
                         <li><input value="${role.role_id}" type="checkbox"/>${role.name}</li>
                     </c:forEach>
                 </ul>
             </div>
             <span class="required">*</span>
-            <div class="validate_msg_tiny error_msg">至少选择一个</div>
+            <div id="roleError" class="validate_msg_tiny error_msg" style="display: none">至少选择一个</div>
         </div>
         <div class="button_info clearfix">
             <input type="button" value="保存" class="btn_save" onclick="showResult();"/>
