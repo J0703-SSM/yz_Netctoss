@@ -26,6 +26,7 @@ public class FeeController {
     @Autowired
     private CostService costService;
 
+    // 查询所有
     @RequestMapping(value = "/fee_list")
     public String feeList(Integer pc, Model model, String str, String sort, HttpServletRequest request, HttpSession session) {
         System.out.println("sort:"+sort);
@@ -40,6 +41,7 @@ public class FeeController {
             str =null;
         }
         System.out.println("pc:" + pc);
+        // str,sort:排序
         PageBean<Cost> pb = costService.findAll(pc, ps, str);
         model.addAttribute("pb", pb);
         request.setAttribute("sort",sort);
@@ -53,6 +55,7 @@ public class FeeController {
         return "fee/fee_add";
     }
 
+    // 增加
     @ResponseBody
     @RequestMapping("/fee_add")
     public AjaxLoginResult<Cost> fee_add(Cost cost) {
@@ -73,6 +76,7 @@ public class FeeController {
         return result;
     }
 
+    // 删除
     @ResponseBody
     @RequestMapping("/fee_delete")
     public AjaxLoginResult<Cost> fee_delete(Integer id){
@@ -89,6 +93,7 @@ public class FeeController {
         return result;
     }
 
+    // 修改(跳转 回显)
     @RequestMapping("/feeModi")
     public String feeModi(Integer cost_id,Model model){
 
@@ -96,6 +101,7 @@ public class FeeController {
         model.addAttribute("cost",cost);
         return "fee/fee_modi";
     }
+    // 开始
     @ResponseBody
     @RequestMapping("/fee_start")
     public AjaxLoginResult<Cost> startFee(Integer id){
@@ -112,6 +118,7 @@ public class FeeController {
     }
 
 
+    // 修改
     @ResponseBody
     @RequestMapping("/fee_modi")
     public AjaxLoginResult<Cost> fee_modi(Cost cost){

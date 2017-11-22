@@ -26,9 +26,11 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    // 查询所有账务信息
     @RequestMapping("/account_list")
     public String accountList(Integer pc, Model model,Account account,HttpSession session) {
         System.out.println("account1:" + account);
+        // 高级查询条件判空
         if (account.getStatus() != null || account.getLogin_name() != null || account.getReal_name() != null || account.getIdcard_no() != null){
             session.setAttribute("account",account);
         }
@@ -36,17 +38,17 @@ public class AccountController {
         if (session.getAttribute("account") != null) {
             account1 = (Account) session.getAttribute("account");
         }
+        // 分页
         if (pc == null) {
             pc = 1;
         }
         int ps = 3;
-        System.out.println("pc:" + pc);
-        System.out.println("account2:" + account);
+
         PageBean<Account> pb = accountService.findAll(pc, ps ,account1);
         model.addAttribute("pb", pb);
         return "account/account_list";
     }
-
+    // 增加(跳转)
     @RequestMapping("/accountAdd")
     public String accountAdd(HttpSession session,Model model){
 
@@ -59,7 +61,7 @@ public class AccountController {
         }
         return "account/account_add";
     }
-
+    // 增加
     @ResponseBody
     @RequestMapping("/account_add")
     public AjaxLoginResult<Account> account_add(Account account,String relogin_passwd,
@@ -71,11 +73,13 @@ public class AccountController {
         }
 
         AjaxLoginResult<Account> result = new AjaxLoginResult<Account>();
+        // 两次密码校验
         if (!relogin_passwd.equals(account.getLogin_passwd())){
             result.setErrorCode(202);
             session.setAttribute("passError","重复密码与原密码不一致!请重新输入");
             return result;
         }
+        // 电话正则
         String cellphone = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
         String telephone = "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$";
         if (isMatch(cellphone,account.getTelephone()) || isMatch(telephone,account.getTelephone())){
@@ -100,6 +104,7 @@ public class AccountController {
         return result;
     }
 
+    // 暂停
     @ResponseBody
     @RequestMapping("/account_pause")
     public AjaxLoginResult<Account> accountPause(Integer id){
@@ -117,6 +122,7 @@ public class AccountController {
         return result;
     }
 
+    // 开始
     @ResponseBody
     @RequestMapping("/account_start")
     public AjaxLoginResult<Account> accountStart(Integer id){
@@ -134,6 +140,7 @@ public class AccountController {
         return result;
     }
 
+    // 删除
     @ResponseBody
     @RequestMapping("/account_delete")
     public AjaxLoginResult<Account> accountDelete(Integer id){
@@ -150,6 +157,7 @@ public class AccountController {
         return result;
     }
 
+    // 修改(跳转 回显)
     @RequestMapping("/accountModi")
     public String accountModi(Integer account_id,Model model,HttpServletRequest request){
         System.out.println("account_id:" + account_id);
@@ -165,7 +173,7 @@ public class AccountController {
 
         return "account/account_modi";
     }
-
+    // 修改
     @ResponseBody
     @RequestMapping("/account_modi")
     public AjaxLoginResult<Account> account_modi(Account account,String reIdcard_no){
@@ -189,7 +197,7 @@ public class AccountController {
     }
 
 
-
+    // 正则方法
     public static boolean isMatch(String reg, String str){
         return Pattern.matches(reg,str);
     }

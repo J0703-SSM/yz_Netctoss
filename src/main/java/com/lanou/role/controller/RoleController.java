@@ -23,6 +23,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    // 查询所有
     @RequestMapping("/role_list")
     public String roleList(Integer pc, Model model){
         if (pc == null) {
@@ -35,12 +36,12 @@ public class RoleController {
 
         return "role/role_list";
     }
-
+    // 增加(跳转)
     @RequestMapping("/roleAdd")
     public String roleAdd(){
         return "role/role_add";
     }
-
+    // 增加
     @ResponseBody
     @RequestMapping("/role_add")
     public AjaxLoginResult<Role> role_add(@RequestParam(value = "module_id[]") Integer[] module_id,String name){
@@ -60,6 +61,7 @@ public class RoleController {
         return result;
     }
 
+    // 修改,回显,跳转
     @RequestMapping("/roleModi")
     public String roleModi(Integer role_id,Model model){
         System.out.println("role_id:" + role_id);
@@ -68,7 +70,7 @@ public class RoleController {
         model.addAttribute("role",role);
         return "role/role_modi";
     }
-
+    // 修改
     @ResponseBody
     @RequestMapping("/role_modi")
     public AjaxLoginResult<Role> role_modi(@RequestParam(value = "module_id[]") Integer[] module_id,Role role){
@@ -87,7 +89,7 @@ public class RoleController {
 
         return result;
     }
-
+    // 删除
     @ResponseBody
     @RequestMapping("/role_delete")
     public AjaxLoginResult<Role> role_delete(Integer id){

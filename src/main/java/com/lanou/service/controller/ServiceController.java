@@ -23,11 +23,11 @@ public class ServiceController {
     @Autowired
     private ServiceService serviceService;
 
-
+    // 查询所有
     @RequestMapping("/service_list")
     public String service_list(Integer pc, Model model, Services services,String idcard_no, HttpSession session) {
-        System.out.println("services1:" + services);
 
+        // 高级查询条件判空
         if (services.getStatus() != null || services.getOs_username() != null || services.getUnix_host() != null || idcard_no != null) {
             if (idcard_no != ""){
                 services.getAccount().setIdcard_no(idcard_no);
@@ -38,12 +38,12 @@ public class ServiceController {
         if (session.getAttribute("services") != null) {
             services1 = (Services) session.getAttribute("services");
         }
+        // 分页
         if (pc == null) {
             pc = 1;
         }
         int ps = 3;
-        System.out.println("pc:" + pc);
-        System.out.println("account2:" + services1);
+
         PageBean<Services> pb = serviceService.findAll(pc, ps, services1);
         model.addAttribute("pb", pb);
         return "service/service_list";

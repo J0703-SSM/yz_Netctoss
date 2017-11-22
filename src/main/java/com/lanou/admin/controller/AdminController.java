@@ -35,9 +35,10 @@ public class AdminController {
     private AdminService adminService;
 
 
+    /*查询所有*/
     @RequestMapping("/admin_list")
     public String adminList(Integer pc, Model model, Integer module_id, String rname, HttpSession session){
-        System.out.println(rname);
+        // 高级查询条件判空,如果执行高级查询,就将条件存入session中
         if (module_id != null || rname != null ) {
             Admin admin = new Admin();
             if (module_id != 0){
@@ -49,6 +50,7 @@ public class AdminController {
             session.setAttribute("admin", admin);
         }
         Admin admin = new Admin();
+        //先从session中取,如果取到对象,用此对象去判断
         if (session.getAttribute("admin") != null) {
             admin = (Admin) session.getAttribute("admin");
             System.out.println("sessionAdmin:"+admin);
@@ -63,6 +65,7 @@ public class AdminController {
         return "admin/admin_list";
     }
 
+    /*密码重置*/
     @ResponseBody
     @RequestMapping("/admin_passwdReset")
     public AjaxLoginResult<Admin> admin_passwdReset(@RequestParam(value = "ids[]") Integer[] ids){
@@ -83,6 +86,7 @@ public class AdminController {
         return result;
     }
 
+    /*添加跳转*/
     @RequestMapping("/adminAdd")
     public String adminAdd(Model model){
         List<Role> roles = adminService.findRole();
@@ -90,12 +94,14 @@ public class AdminController {
         return "admin/admin_add";
     }
 
+    /*添加*/
     @ResponseBody
     @RequestMapping("/admin_add")
     public AjaxLoginResult<Admin> admin_add(Admin admin,String rePassword,@RequestParam(value = "ids[]") Integer[] ids){
 
         AjaxLoginResult<Admin> result = new AjaxLoginResult<Admin>();
 
+        // 密码正则
         String passWdRegex="[a-zA-Z0-9]{0,30}";
         if (isMatch(passWdRegex,admin.getPassword())){
 
@@ -104,10 +110,12 @@ public class AdminController {
             return result;
         }
 
+        // 两次密码是否一致
         if (!rePassword.equals(admin.getPassword())){
             result.setErrorCode(10);
             return result;
         }
+        // 手机号,电话号正则
         String cellphone = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
         String telephone = "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$";
         if (isMatch(cellphone,admin.getTelephone()) || isMatch(telephone,admin.getTelephone())) {
@@ -116,6 +124,7 @@ public class AdminController {
             result.setErrorCode(20);
             return result;
         }
+        // 邮箱正则
         String emailRegx ="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
         if (isMatch(emailRegx,admin.getEmail())){
 
@@ -137,11 +146,12 @@ public class AdminController {
         return result;
     }
 
+    // 修改 回显 跳转
     @RequestMapping("/adminModi")
     public String roleModi(Integer admin_id, Model model, HttpServletRequest request){
         System.out.println("admin_id:" + admin_id);
         List<Role> roles = adminService.findRole();
-
+        // 通过id查询roles
         Admin admin = adminService.findRolesByAdminId(admin_id);
         System.out.println(admin.getRoles());
         request.setAttribute("roles",roles);
@@ -149,6 +159,7 @@ public class AdminController {
         return "admin/admin_modi";
     }
 
+    // 修改
     @ResponseBody
     @RequestMapping("/admin_modi")
     public AjaxLoginResult<Admin> role_modi(@RequestParam(value = "role_id[]") Integer[] role_id,Admin admin){
@@ -168,6 +179,7 @@ public class AdminController {
         return result;
     }
 
+    // 删除
     @ResponseBody
     @RequestMapping("/admin_delete")
     public AjaxLoginResult<Admin> admin_delete(Integer id){
@@ -180,42 +192,48 @@ public class AdminController {
         return result;
     }
 
+    // 登录
     @ResponseBody
     @RequestMapping("/login")
     public AjaxLoginResult<Admin> login(String admin_code, String password,String verifyCode,HttpServletRequest request){
         AjaxLoginResult<Admin> result = new AjaxLoginResult<Admin>();
         System.out.println(verifyCode);
         String verifyCode1 = (String)request.getSession().getAttribute("verifyCode");
+        // 验证码校验
         if (verifyCode != null){
             if (!verifyCode.equalsIgnoreCase(verifyCode1)){
                 result.setErrorCode(30);
                 return result;
             }
         }
+
         Admin admin = adminService.findAdminByCode(admin_code);
         if (admin != null){
             if (admin.getPassword().equals(password)){
-                result.setErrorCode(5);
+                result.setErrorCode(5);//登录成功
                 request.getServletContext().setAttribute("admin",admin);
                 return result;
             }else {
-                result.setErrorCode(20);
+                result.setErrorCode(20);// 密码错误
                 return result;
             }
         }else {
-            result.setErrorCode(10);
+            result.setErrorCode(10);// 用户名不存在
             return result;
         }
     }
 
+    // 获取验证码
     @RequestMapping("/getVerifyCode")
     public void getVerifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         VerifyCode code = new VerifyCode();
         BufferedImage image = code.getImage();
+        // 将值传到session中
         request.getSession().setAttribute("verifyCode", code.getText());
         VerifyCode.output(image, response.getOutputStream());
     }
 
+    // 用户信息回显
     @RequestMapping("/user_info")
     public String userInfo(HttpServletRequest request,Model model){
         Admin admin = (Admin) request.getServletContext().getAttribute("admin");
@@ -226,6 +244,7 @@ public class AdminController {
     }
 
 
+    // 正则验证方法
     public static boolean isMatch(String reg, String str){
         return Pattern.matches(reg,str);
     }
